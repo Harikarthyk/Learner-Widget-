@@ -1,11 +1,20 @@
+//Import Dependencies
 const app = require("express");
-const { createAccount } = require("../controllers/auth");
-const router = app.Router() ;
+const router = app.Router();
 
-// @type POST 
+//Controllers
+const {createAccount, login} = require("../controllers/auth");
+
+// @type POST
 // @route /createAccount
-// @desc creating new Account 
+// @desc creating new Account
 // @access PUBLIC
-router.post('/createAccount',createAccount)
+router.post("/createAccount", createAccount);
+
+// @type POST
+// @route /login
+// @desc Login
+// @access PUBLIC
+router.post("/login", login);
 
 module.exports = router;
