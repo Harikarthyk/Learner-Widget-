@@ -17,8 +17,12 @@ const profileSchema = new mongoose.Schema(
 			type: Array,
 			default: [],
 		},
-		profile_pic: {
+		profile_picture: {
 			type: String,
+		},
+		phone_number: {
+			type: String,
+			trim: true,
 		},
 	},
 	{timestamps: true},
