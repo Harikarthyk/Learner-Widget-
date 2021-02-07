@@ -9,8 +9,6 @@ const app = express();
 const mongoURI =
 	"mongodb+srv://hari:harikanna@cluster0.gczxd.mongodb.net/LearningWidget?retryWrites=true&w=majority";
 
-//I am Chandru 
-
 //Attempt to connect DB
 mongoose
 	.connect(mongoURI, {

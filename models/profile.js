@@ -24,6 +24,10 @@ const profileSchema = new mongoose.Schema(
 			type: String,
 			trim: true,
 		},
+		portfolio: {
+			type: String,
+			trim: true,
+		},
 	},
 	{timestamps: true},
 );

@@ -1,5 +1,6 @@
 //Import Dependencies
 const bcrypt = require("bcrypt");
+const Profile = require("../models/profile");
 
 //Models
 const User = require("../models/user");
@@ -7,6 +8,7 @@ const User = require("../models/user");
 //TODO => MAKE IT PRIVATE
 let saltRounds = 10;
 
+//TODO => Create Profile on creating the Account
 // @type POST
 // @route /createAccount
 // @desc creating new Account
@@ -32,6 +34,8 @@ exports.createAccount = (req, res) => {
 			newUser
 				.save()
 				.then(() =>
+					//TODO => Create Profile on creating the Account
+
 					res.status(200).json({
 						messsage: "New Account created successfully",
 						error: false,
@@ -78,10 +82,14 @@ exports.login = (req, res) => {
 				});
 			}
 
+			//Hide password before sending the response
+			prevUser.password = undefined;
+
 			//Password match Login Successfull
 			return res.status(200).json({
 				messsage: "Login Successfull",
 				error: false,
+				user: prevUser,
 			});
 		});
 	});
