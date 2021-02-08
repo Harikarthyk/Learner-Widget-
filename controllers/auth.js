@@ -8,7 +8,6 @@ const User = require("../models/user");
 //TODO => MAKE IT PRIVATE
 let saltRounds = 10;
 
-//TODO => Create Profile on creating the Account
 // @type POST
 // @route /createAccount
 // @desc creating new Account
@@ -33,14 +32,30 @@ exports.createAccount = (req, res) => {
 			//Attempt to save
 			newUser
 				.save()
-				.then(() =>
-					//TODO => Create Profile on creating the Account
-
-					res.status(200).json({
-						messsage: "New Account created successfully",
-						error: false,
-					}),
-				)
+				.then((newUser) => {
+					let userProfile = new Profile({
+						user: newUser._id,
+						profession: "",
+						description: "",
+						skills: [],
+						phone_number: "",
+						portfolio: "",
+					});
+					userProfile
+						.save()
+						.then(() =>
+							res.status(200).json({
+								messsage: "New Account created successfully",
+								error: false,
+							}),
+						)
+						.catch((error) =>
+							res.status(400).json({
+								messsage: "Error in creating Account",
+								error: true,
+							}),
+						);
+				})
 				.catch((error) =>
 					res.status(400).json({
 						messsage: "Error in creating Account",

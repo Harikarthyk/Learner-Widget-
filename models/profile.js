@@ -19,6 +19,7 @@ const profileSchema = new mongoose.Schema(
 		},
 		profile_picture: {
 			type: String,
+			default: "https://img.icons8.com/bubbles/2x/user.png",
 		},
 		phone_number: {
 			type: String,

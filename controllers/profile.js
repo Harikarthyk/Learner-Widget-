@@ -1,22 +1,31 @@
 const Profile = require("../models/profile");
 
 // @desc setting req.user with help of param userId
-exports.setUser = (req, res, id, next) => {
+exports.setUser = (req, res, next, id) => {
 	//Finding the user profile that matches the param and setting it to req.user
-	Profile.findOne({_id: id}, (error, userProfile) => {
-		if (error) {
+	Profile.findOne({user: id})
+		.populate("user", ["name", "email"])
+		.then((userProfile) => {
+			//no user profile found
+			if (!userProfile) {
+				return res.status(400).json({
+					error: true,
+					message: "No user profile found",
+				});
+			}
+
+			//Hide password before seting the req.user
+			userProfile.password = undefined;
+
+			req.user = userProfile;
+			next();
+		})
+		.catch((error) => {
 			return res.status(400).json({
 				error: true,
-				message: "Error in viewing the user profile",
+				message: "Error in finding the user profile",
 			});
-		}
-
-		//Hide password before seting the req.user
-		userProfile.password = undefined;
-
-		req.user = userProfile;
-		next();
-	});
+		});
 };
 
 // @type GET
@@ -56,7 +65,6 @@ exports.updateUserProfile = (req, res) => {
 			}
 			return res.status(200).json({
 				message: "Profile Updated Successfull",
-				userProfile: userProfile,
 				error: false,
 			});
 		},
