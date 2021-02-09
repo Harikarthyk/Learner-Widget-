@@ -7,6 +7,7 @@ const app = express();
 //Acutal Route
 const authRoute = require("./routes/auth");
 const profileRoute = require("./routes/profile");
+const questionRoute = require("./routes/question");
 
 //middleware
 app.use(bodyParser.json());
@@ -36,6 +37,7 @@ app.get("/", (req, res) => {
 //actual route
 app.use("/api", authRoute);
 app.use("/api", profileRoute);
+app.use("/api", questionRoute);
 
 //PORT
 const PORT = process.env.PORT || 5050;
