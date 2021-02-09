@@ -172,3 +172,56 @@ exports.addAnswer = (req, res) => {
 			}),
 		);
 };
+
+// @type DELETE
+// @route delete/answer/question/:userId/:questionId
+// @desc delete answer for the question
+// @access PRIVATE
+exports.deleteAnswer = (req, res) => {
+	//If req.question not available
+	if (!req.question) {
+		return res.status(400).json({
+			error: true,
+			message: "No question found",
+		});
+	}
+
+	//If req.user not available
+	if (!req.user) {
+		return res.status(400).json({
+			error: true,
+			message: "No user found",
+		});
+	}
+
+	//Finding the question the answer belongs
+	Question.findOne({_id: req.question._id}, (error, entireQuestion) => {
+		if (error) {
+			return res.status(400).json({
+				error: "Error in deleting the answer",
+			});
+		}
+		let answers = entireQuestion.answers;
+		entireQuestion.answers = answers.filter(
+			(answer) => String(answer._id) !== req.body.answerId,
+		);
+
+		//Attempt to delete the answer
+		entireQuestion
+			.save()
+			.then(() => {
+				return res.status(200).json({
+					error: false,
+					message: "Answer deleted successfully",
+				});
+			})
+			.catch((error) =>
+				res.status(400).json({
+					error: true,
+					message: "Error in deleting the successfully",
+				}),
+			);
+	});
+};
+
+exports.upvoteQuestion = (req, res) => {};
