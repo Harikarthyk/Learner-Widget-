@@ -73,6 +73,7 @@ exports.addQuestion = (req, res) => {
 // @access PUBLIC
 exports.getAllQuestion = (req, res) => {
 	Question.find({})
+		.populate("user", "_id name email")
 		.sort({createdAt: "desc"})
 		.then((questions) =>
 			res.status(200).json({

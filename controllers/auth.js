@@ -41,6 +41,7 @@ exports.createAccount = (req, res) => {
 						phone_number: "",
 						portfolio: "",
 					});
+					newUser.password = undefined;
 					userProfile
 						.save()
 						.then(() =>
