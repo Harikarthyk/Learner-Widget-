@@ -11,6 +11,7 @@ const {
 	addAnswer,
 	deleteAnswer,
 	upvoteQuestion,
+	getQuestionByUserId,
 } = require("../controllers/question");
 
 const router = app.Router();
@@ -60,5 +61,11 @@ router.delete("/delete/answer/question/:userId/:questionId", deleteAnswer);
 // @desc upvote for the question
 // @access PRIVATE
 router.put("/upvote/question/:userId/:questionId", upvoteQuestion);
+
+// @type GET
+// @route /questions/:userId
+// @desc get questions by userId
+// @access PRIVATE
+router.get("/questions/:userId", getQuestionByUserId);
 
 module.exports = router;

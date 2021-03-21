@@ -225,4 +225,22 @@ exports.deleteAnswer = (req, res) => {
 	});
 };
 
+exports.getQuestionByUserId = (req, res) => {
+	Question.find({user: req.user.user._id})
+		.sort({createdAt: "desc"})
+		.then((questions) =>
+			res.status(200).json({
+				error: false,
+				message: "Questions fetched successfully",
+				questions: questions,
+			}),
+		)
+		.catch((error) =>
+			res.status(400).json({
+				error: true,
+				message: "Error in fetching all questions",
+			}),
+		);
+};
+
 exports.upvoteQuestion = (req, res) => {};
