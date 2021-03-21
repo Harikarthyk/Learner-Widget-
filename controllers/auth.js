@@ -47,6 +47,7 @@ exports.createAccount = (req, res) => {
 							res.status(200).json({
 								messsage: "New Account created successfully",
 								error: false,
+								user: newUser,
 							}),
 						)
 						.catch((error) =>
