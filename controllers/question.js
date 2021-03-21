@@ -227,6 +227,7 @@ exports.deleteAnswer = (req, res) => {
 
 exports.getQuestionByUserId = (req, res) => {
 	Question.find({user: req.user.user._id})
+		.populate("user", "_id name email")
 		.sort({createdAt: "desc"})
 		.then((questions) =>
 			res.status(200).json({
