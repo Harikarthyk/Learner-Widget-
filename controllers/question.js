@@ -74,6 +74,7 @@ exports.addQuestion = (req, res) => {
 exports.getAllQuestion = (req, res) => {
 	Question.find({})
 		.populate("user", "_id name email")
+		.populate("answers.user", "_id name email")
 		.sort({createdAt: "desc"})
 		.then((questions) =>
 			res.status(200).json({
