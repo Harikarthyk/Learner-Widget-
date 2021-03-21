@@ -246,4 +246,51 @@ exports.getQuestionByUserId = (req, res) => {
 		);
 };
 
-exports.upvoteQuestion = (req, res) => {};
+exports.upvoteQuestion = (req, res) => {
+	//If req.question not available
+	if (!req.question) {
+		return res.status(400).json({
+			error: true,
+			message: "No question found",
+		});
+	}
+
+	//If req.user not available
+	if (!req.user) {
+		return res.status(400).json({
+			error: true,
+			message: "No user found",
+		});
+	}
+	let arr = req.question.upvotes;
+	let check = false;
+	let index = -1;
+	for (let i = 0; i < arr.length; i++) {
+		let a = arr[i]._id + "";
+		let b = req.user._id + "";
+		if (a === b) {
+			check = true;
+			index = i;
+			break;
+		}
+	}
+
+	if (check) {
+		arr.splice(index, 1);
+	} else arr.push(req.user._id);
+	req.question.upvotes = arr;
+	req.question
+		.save()
+		.then(() => {
+			return res.status(200).json({
+				error: false,
+				message: (check ? "Removed Like " : "Liked ") + "successfully",
+			});
+		})
+		.catch((error) =>
+			res.status(400).json({
+				error: true,
+				message: "Error in upvoting the answer",
+			}),
+		);
+};
