@@ -23,11 +23,11 @@ exports.setQuestion = (req, res, next, id) => {
 };
 
 // @type GET
-// @route question/:questionId
+// @route  
 // @desc get question
 // @access PUBLIC
 exports.getQuestion = (req, res) => {
-	if (!req.question) {
+ 	if (!req.question) {
 		return res.status(200).json({
 			error: false,
 			message: "No Question found",
