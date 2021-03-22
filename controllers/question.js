@@ -287,9 +287,9 @@ exports.upvoteQuestion = (req, res) => {
 		let a = req.user.user.liked || [];
 		let ind = -1;
 		for (let i = 0; i < a.length; i++) {
-			let a = a[i]._id + "";
+			let aa = a[i]._id + "";
 			let b = req.user.user._id + "";
-			if (a === b) {
+			if (aa === b) {
 				ind = i;
 				break;
 			}
