@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
+		liked: {
+			type: Array,
+			default: [],
+		},
 	},
 	{timestamps: true},
 );

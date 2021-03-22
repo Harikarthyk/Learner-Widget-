@@ -3,8 +3,8 @@ const Question = require("../models/question");
 // @desc setting req.question with help of param questionId
 exports.setQuestion = (req, res, next, id) => {
 	Question.findOne({_id: id})
-		.populate("user", ["_id", "name", "email"])
-		.populate("answers.user", "_id name email")
+		.populate("user", ["_id", "name", "email", "liked"])
+		.populate("answers.user", "_id name email liked")
 		.then((entireQuestion) => {
 			if (!entireQuestion) {
 				res.status(400).json({
@@ -74,8 +74,8 @@ exports.addQuestion = (req, res) => {
 // @access PUBLIC
 exports.getAllQuestion = (req, res) => {
 	Question.find({})
-		.populate("user", "_id name email")
-		.populate("answers.user", "_id name email")
+		.populate("user", "_id name email liked")
+		.populate("answers.user", "_id name email liked")
 		.sort({createdAt: "desc"})
 		.then((questions) =>
 			res.status(200).json({
@@ -227,6 +227,10 @@ exports.deleteAnswer = (req, res) => {
 	});
 };
 
+// @type GET
+// @route /questions/:userId
+// @desc get questions by userId
+// @access PRIVATE
 exports.getQuestionByUserId = (req, res) => {
 	Question.find({user: req.user.user._id})
 		.populate("user", "_id name email")
@@ -246,6 +250,10 @@ exports.getQuestionByUserId = (req, res) => {
 		);
 };
 
+// @type PUT
+// @route upvote/question/:userId/:questionId
+// @desc upvote for the question
+// @access PRIVATE
 exports.upvoteQuestion = (req, res) => {
 	//If req.question not available
 	if (!req.question) {
@@ -267,25 +275,53 @@ exports.upvoteQuestion = (req, res) => {
 	let index = -1;
 	for (let i = 0; i < arr.length; i++) {
 		let a = arr[i]._id + "";
-		let b = req.user._id + "";
+		let b = req.user.user._id + "";
 		if (a === b) {
 			check = true;
 			index = i;
 			break;
 		}
 	}
-
 	if (check) {
 		arr.splice(index, 1);
-	} else arr.push(req.user._id);
+		let a = req.user.user.liked || [];
+		let ind = -1;
+		for (let i = 0; i < a.length; i++) {
+			let a = a[i]._id + "";
+			let b = req.user.user._id + "";
+			if (a === b) {
+				ind = i;
+				break;
+			}
+		}
+		if (ind >= 0) {
+			a.splice(ind, 1);
+		}
+		req.user.user.liked = a;
+	} else {
+		arr.push(req.user.user._id);
+		let a = req.user.user.liked || [];
+		a.push(req.question._id);
+		req.user.user.liked = a;
+	}
 	req.question.upvotes = arr;
 	req.question
 		.save()
 		.then(() => {
-			return res.status(200).json({
-				error: false,
-				message: (check ? "Removed Like " : "Liked ") + "successfully",
-			});
+			req.user.user
+				.save()
+				.then(() => {
+					return res.status(200).json({
+						error: false,
+						message: (check ? "Removed Like " : "Liked ") + "successfully",
+					});
+				})
+				.catch((error) =>
+					res.status(400).json({
+						error: true,
+						message: "Error in upvoting the answer",
+					}),
+				);
 		})
 		.catch((error) =>
 			res.status(400).json({

@@ -4,7 +4,7 @@ const Profile = require("../models/profile");
 exports.setUser = (req, res, next, id) => {
 	//Finding the user profile that matches the param and setting it to req.user
 	Profile.findOne({user: id})
-		.populate("user", ["name", "email"])
+		.populate("user", ["name", "email", "_id", "liked"])
 		.then((userProfile) => {
 			//no user profile found
 			if (!userProfile) {
