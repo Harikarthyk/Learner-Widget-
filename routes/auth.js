@@ -2,7 +2,12 @@
 const app = require("express");
 
 //Controllers
-const {createAccount, login} = require("../controllers/auth");
+const {
+  createAccount,
+  login,
+  getOTPforPassword,
+  setNewPassword,
+} = require("../controllers/auth");
 
 const router = app.Router();
 
@@ -17,5 +22,9 @@ router.post("/createAccount", createAccount);
 // @desc Login
 // @access PUBLIC
 router.post("/login", login);
+
+router.post("/forgotpassword", getOTPforPassword);
+
+router.post("/set/password", setNewPassword);
 
 module.exports = router;
