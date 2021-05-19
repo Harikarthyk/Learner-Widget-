@@ -6,6 +6,7 @@ const nodemailer = require("nodemailer");
 //Models
 const User = require("../models/user");
 
+//TODO => MAKE IT PRIVATE
 let saltRounds = 10;
 
 const generateRandomNumber = () => {

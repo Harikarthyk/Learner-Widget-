@@ -11,6 +11,8 @@ const {
 	addAnswer,
 	deleteAnswer,
 	upvoteQuestion,
+	getQuestionByUserId,
+	getQuestion,
 } = require("../controllers/question");
 
 const router = app.Router();
@@ -60,5 +62,17 @@ router.delete("/delete/answer/question/:userId/:questionId", deleteAnswer);
 // @desc upvote for the question
 // @access PRIVATE
 router.put("/upvote/question/:userId/:questionId", upvoteQuestion);
+
+// @type GET
+// @route /questions/:userId
+// @desc get questions by userId
+// @access PRIVATE
+router.get("/questions/:userId", getQuestionByUserId);
+
+// @type GET
+// @route /question/:questionId
+// @desc get question by questionId
+// @access PUBLIC
+router.get("/question/:questionId", getQuestion);
 
 module.exports = router;
